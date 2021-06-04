@@ -14,33 +14,44 @@ class ByteBankApp extends StatelessWidget {
   }
 }
 
-class TransferList extends StatelessWidget {
+class TransferList extends StatefulWidget {
   final List<Transfer> _transferList = [];
 
   @override
+  State<StatefulWidget> createState() {
+    return TransferListState();
+  }
+}
+
+class TransferListState extends State<TransferList>{
+
+  @override
   Widget build(BuildContext context) {
-    _transferList.add(Transfer(110.00, 4321));
     return Scaffold(
       appBar: AppBar(
         title: Text('Transferências'),
       ),
       body: ListView.builder(
-        itemCount: _transferList.length,
+        itemCount: widget._transferList.length,
         itemBuilder: (context, position) {
-          return TransferItem(_transferList[position]);
+          return TransferItem(widget._transferList[position]);
         },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
           final Future future =
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
             return TransferForm();
           }));
           future.then((receiveTransfer) {
             debugPrint('chegou no then do future');
             debugPrint('$receiveTransfer');
-            _transferList.add(receiveTransfer);
+            if(receiveTransfer != null){
+              setState(() {
+                widget._transferList.add(receiveTransfer);
+              });
+            }
           });
         },
       ),
@@ -48,9 +59,18 @@ class TransferList extends StatelessWidget {
   }
 }
 
-class TransferForm extends StatelessWidget {
+class TransferForm extends StatefulWidget {
+
+  @override
+  State<StatefulWidget> createState() {
+    return TransferFormState();
+  }
+}
+
+class TransferFormState extends State<TransferForm>{
+
   final TextEditingController _controllerAccountNumber =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _controllerValue = TextEditingController();
 
   @override
@@ -59,25 +79,27 @@ class TransferForm extends StatelessWidget {
       appBar: AppBar(
         title: Text('Transferir'),
       ),
-      body: Column(
-        children: <Widget>[
-          Editor(
-            controllerField: _controllerAccountNumber,
-            hint: '000000',
-            label: 'Numero da Conta',
-          ),
-          Editor(
-            controllerField: _controllerValue,
-            label: 'Valor',
-            hint: '0.00',
-            icon: Icons.monetization_on,
-          ),
-          ElevatedButton(
-              child: Text('Confirmar'),
-              onPressed: () {
-                _createTransfer(context);
-              })
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Editor(
+              controllerField: _controllerAccountNumber,
+              hint: '000000',
+              label: 'Numero da Conta',
+            ),
+            Editor(
+              controllerField: _controllerValue,
+              label: 'Valor',
+              hint: '0.00',
+              icon: Icons.monetization_on,
+            ),
+            ElevatedButton(
+                child: Text('Confirmar'),
+                onPressed: () {
+                  _createTransfer(context);
+                })
+          ],
+        ),
       ),
     );
   }
