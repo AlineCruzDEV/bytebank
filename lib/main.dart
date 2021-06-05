@@ -5,12 +5,21 @@ void main() {
 }
 
 class ByteBankApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-      body: TransferList(),
-    ));
+      theme: ThemeData(
+        primaryColor: Colors.redAccent[700],
+        accentColor: Colors.red[900],
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.red[900]
+          ),
+        )
+      ),
+        home: TransferList(),
+    );
   }
 }
 
@@ -105,8 +114,8 @@ class TransferFormState extends State<TransferForm>{
   }
 
   void _createTransfer(BuildContext context) {
-    double? value = double.tryParse(_controllerValue.text);
-    int? accountNumber = int.tryParse(_controllerAccountNumber.text);
+    final double? value = double.tryParse(_controllerValue.text);
+    final int? accountNumber = int.tryParse(_controllerAccountNumber.text);
 
     if (_controllerAccountNumber != null && _controllerValue != null) {
       final createdTransfer = Transfer(value!, accountNumber!);
