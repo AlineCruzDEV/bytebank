@@ -26,6 +26,15 @@ class Editor extends StatelessWidget {
           icon: icon != null ? Icon(icon) : null,
           labelText: label,
           hintText: hint,
+          labelStyle: TextStyle(
+            color: Colors.black,
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
+              width: 1,
+            )
+          ),
         ),
         keyboardType: TextInputType.number,
       ),

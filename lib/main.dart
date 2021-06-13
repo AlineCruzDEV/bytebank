@@ -18,6 +18,9 @@ class ByteBankApp extends StatelessWidget {
             backgroundColor: Colors.red[900],
           ),
         ),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.redAccent[700],
+        ),
       ),
       home: TransferList(),
     );
